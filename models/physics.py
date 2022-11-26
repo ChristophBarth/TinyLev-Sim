@@ -41,5 +41,8 @@ def get_integral(p, transducer):
     return abs(F(np.pi,d,k).real-F(0,d,k).real)+abs(F(2*np.pi,d,k).real-F(np.pi,d,k).real)
 
 
+
+
+
 if(__name__ == "__main__"):
     pass
