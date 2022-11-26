@@ -74,17 +74,13 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left='com
 
 def plot_integral(transducers=transducers, phase_shift=0, left="complex", right="simple"):
 
-    #TODO: Not working!
     fig, axs = plt.subplots(1, 2)
 
-    vals1 = get_pressure_change(x, z, transducers)
-    vals2 = get_pressure_change(x, z, transducers)
-
-    ax1 = sb.heatmap(vals1, xticklabels=10, yticklabels=10, ax=axs[0], cmap=integral_cmap, vmin=2000, vmax=2880)
+    ax1 = sb.heatmap(get_pressure_change(x, z, transducers, type=left), xticklabels=10, yticklabels=10, ax=axs[0], cmap=integral_cmap, vmin=2500, vmax=5000)
     ax1.invert_yaxis()
     ax1.set_aspect('equal')
 
-    ax2 = sb.heatmap(vals2, xticklabels=10, yticklabels=10, ax=axs[1], cmap=integral_cmap, vmin=150, vmax=250)
+    ax2 = sb.heatmap(get_pressure_change(x, z, transducers, type=right), xticklabels=10, yticklabels=10, ax=axs[1], cmap=integral_cmap, vmin=150, vmax=250)
     ax2.invert_yaxis()
     ax2.set_aspect('equal')
 
@@ -92,5 +88,6 @@ def plot_integral(transducers=transducers, phase_shift=0, left="complex", right=
 
 
 if (__name__ == "__main__"):
-    plot_integral()
+    plot_pressure_waves()
+
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten
