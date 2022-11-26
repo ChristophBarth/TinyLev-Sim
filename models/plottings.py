@@ -4,8 +4,6 @@ from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sb  # TODO: use plt.imshow instead
 
 from models.data_generator import get_pressure_wave, get_interference, get_pressure_change
-from models.physics import get_integral, get_simple_integral, get_amp_at_point_from_transducer, \
-    get_simplified_amp_at_point_from_transducer
 from models.transducer import transducer, generate_transducers
 from models.helpers import make_list
 
@@ -72,7 +70,7 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left='com
 
 
 
-def plot_integral(transducers=transducers, phase_shift=0, left="complex", right="simple"):
+def plot_pressure_change(transducers=transducers, phase_shift=0, left="complex", right="simple"):
 
     fig, axs = plt.subplots(1, 2)
 
@@ -88,6 +86,6 @@ def plot_integral(transducers=transducers, phase_shift=0, left="complex", right=
 
 
 if (__name__ == "__main__"):
-    plot_pressure_waves()
+    plot_pressure_change()
 
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten
