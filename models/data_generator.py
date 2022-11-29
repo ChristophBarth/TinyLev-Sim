@@ -1,11 +1,12 @@
 import numpy as np
 from models.helpers import make_list
-from models.physics import get_pressure_by_transducer_in_point, get_pressure_change_by_transducer_in_point
+from models.physics import get_pressure_by_transducer_in_point, get_pressure_change_by_transducer_in_point, get_directivity_data
 
 
 def get_pressure_wave(x, z, transducers, phase=0, type='complex'):
     transducers = make_list(
         transducers)  # TODO: Hier landen jetzt in der Regel Tupel -> Tupelinhalt muss geändert werden
+
 
     wave = np.zeros((200,200))
 
@@ -32,9 +33,10 @@ def get_pressure_change(x, z, transducers, phase_shift=0, type="complex"):
     for transducer in transducers[1]:
         interference += get_pressure_change_by_transducer_in_point(np.array([x, 0, z], dtype=object), transducer, type)
 
-
     return interference
 
+def get_far_field_directivity(x, z, transducer):
+    return(get_directivity_data(np.array([x,0,z], dtype=object), transducer))
 
 if __name__ == "__main__":
     pass

@@ -5,8 +5,9 @@ from models.helpers import get_distance_to_transducer, get_angle_to_transducer_n
 from models.params import TRANSDUCER_RADIUS, BASE_AMP, K
 
 
-def far_field_directivity(k, a, theta):
+def far_field_directivity(theta, k=K, a=TRANSDUCER_RADIUS):
     temp = k * a * np.sin(theta)
+
     if temp == 0:
         return 1
     else:
@@ -16,16 +17,22 @@ def far_field_directivity(k, a, theta):
 get_far_field_directivity = np.vectorize(far_field_directivity)
 
 
-def get_pressure_by_transducer_in_point(p, transducer, phase, tyoe):
+def get_pressure_by_transducer_in_point(p, transducer, phase, type):
     d = get_distance_to_transducer(p, transducer)
     if type == 'complex':
         theta = get_angle_to_transducer_normal(p, transducer)
-        far_field_directivity = get_far_field_directivity(K, TRANSDUCER_RADIUS, theta)
+        far_field_directivity = get_far_field_directivity(theta, K, TRANSDUCER_RADIUS)
         return BASE_AMP * far_field_directivity / d * np.exp(1j * (-phase + K * d)).real
     elif type == 'simple':
         return BASE_AMP * np.sin(-phase + K * d)
     else:
         raise ValueError(f"Unsupported value \"{type}\" for parameter \"type\"")
+
+def get_directivity_data(p, transducer):
+    d = get_distance_to_transducer(p, transducer)
+    theta = get_angle_to_transducer_normal(p, transducer)
+    far_field_directivity = get_far_field_directivity(theta, K, TRANSDUCER_RADIUS)
+    return far_field_directivity
 
 
 def pressure_change_by_transducer_in_point(t, d, k):

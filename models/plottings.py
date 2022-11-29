@@ -3,21 +3,25 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sb  # TODO: use plt.imshow instead
 
-from models.data_generator import get_pressure_wave, get_interference, get_pressure_change
+
+import models.physics
+from models.data_generator import get_pressure_wave, get_interference, get_pressure_change, get_far_field_directivity
 from models.transducer import transducer, generate_transducers
 from models.helpers import make_list
 
+
 custom_cmap = LinearSegmentedColormap.from_list("custom", ["red", "white", "blue"])
 integral_cmap = LinearSegmentedColormap.from_list("custom", ["black", "black", "red", "yellow", "white"])
-expose_cmap = LinearSegmentedColormap.from_list("custom",
-                                                ["yellow", "red", "red", "red", "black", "red", "red", "red", "yellow"])
+expose_cmap = LinearSegmentedColormap.from_list("custom", ["yellow", "red", "red", "red", "black", "red", "red", "red", "yellow"])
 gif_cmap = LinearSegmentedColormap.from_list("custom", ["black", "white", "black"])
+directivity_cmap = LinearSegmentedColormap.from_list("custom", ["white", "black"])
 
 x = np.linspace(-0.05, 0.05, 200)
 z = np.linspace(0, 0.1, 200)
 x, z = np.meshgrid(x, z)
 
 transducers = generate_transducers()
+base_transducer = transducer(np.array([0,0,0]), np.array([0,0,1]), 0)
 
 
 def plot_transducers(bottom_transducers=transducers[0], top_transducers=transducers[1]):
@@ -52,6 +56,7 @@ def plot_pressure_waves(transducers=transducers[0], phase=0, left="complex", rig
     plt.show()
 
 
+
 def plot_interference(transducers=transducers, phase=0, phase_shift=0, left='complex', right='simple'):
     fig, axs = plt.subplots(1, 2)
 
@@ -69,7 +74,6 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left='com
     plt.show()
 
 
-
 def plot_pressure_change(transducers=transducers, phase_shift=0, left="complex", right="simple"):
 
     fig, axs = plt.subplots(1, 2)
@@ -85,7 +89,12 @@ def plot_pressure_change(transducers=transducers, phase_shift=0, left="complex",
     plt.show()
 
 
+def plot_directivity_function(transducer=base_transducer):
+    plt.imshow(get_far_field_directivity(x,z,transducer), origin='lower', cmap=directivity_cmap)
+    plt.colorbar(shrink=.7)
+    plt.show()
+
 if (__name__ == "__main__"):
-    plot_pressure_change()
+    pass
 
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten
