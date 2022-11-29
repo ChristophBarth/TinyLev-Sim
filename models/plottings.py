@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sb  # TODO: use plt.imshow instead
 
-
-import models.physics
 from models.data_generator import get_pressure_wave, get_interference, get_pressure_change, get_far_field_directivity
 from models.transducer import transducer, generate_transducers
 from models.helpers import make_list
