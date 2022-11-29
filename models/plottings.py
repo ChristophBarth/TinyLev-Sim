@@ -7,6 +7,8 @@ from models.data_generator import get_pressure_wave, get_interference, get_press
 from models.transducer import transducer, generate_transducers
 from models.helpers import make_list
 
+from models.params import RES
+
 
 custom_cmap = LinearSegmentedColormap.from_list("custom", ["red", "white", "blue"])
 integral_cmap = LinearSegmentedColormap.from_list("custom", ["black", "black", "red", "yellow", "white"])
@@ -14,8 +16,8 @@ expose_cmap = LinearSegmentedColormap.from_list("custom", ["yellow", "red", "red
 gif_cmap = LinearSegmentedColormap.from_list("custom", ["black", "white", "black"])
 directivity_cmap = LinearSegmentedColormap.from_list("custom", ["white", "black"])
 
-x = np.linspace(-0.05, 0.05, 200)
-z = np.linspace(0, 0.1, 200)
+x = np.linspace(-0.05, 0.05, RES)
+z = np.linspace(0, 0.1, RES)
 x, z = np.meshgrid(x, z)
 
 transducers = generate_transducers()
