@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.special as sp
 
+import models.transducer
 from models.helpers import get_distance_to_transducer, get_angle_to_transducer_normal
 from models.params import TRANSDUCER_RADIUS, BASE_AMP, K
 
@@ -59,6 +60,6 @@ def get_pressure_change_by_transducer_in_point(p, transducer, type):
     else:
         raise ValueError(f"Unsupported value \"{type}\" for parameter \"type\"")
 
-
 if __name__ == "__main__":
-    pass
+    test_transducer = models.transducer.Transducer(np.array([0,0,0]), np.array([0,0,1]), 0)
+    print(get_pressure_change_by_transducer_in_point(np.array([0,0,1E-3]), test_transducer, "complex"))

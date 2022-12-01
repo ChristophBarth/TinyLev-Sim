@@ -3,7 +3,7 @@ from matplotlib.patches import Circle
 from mpl_toolkits.mplot3d import art3d as art3d
 from models.params import TRANSDUCER_RADIUS, HEIGHT, CENTER, TRANSDUCER_OFFSET
 
-class transducer:
+class Transducer:
     def __init__(self, x,y,z,norm, phase_shift):
         self.pos = np.array([x,y,z])
         self.norm = norm
@@ -51,10 +51,10 @@ def generate_transducers(rings=4):
 
             vector_transducer = np.array([x_offset, y_offset, z_offset])
             norm = vector_0MB-vector_transducer
-            bottom_transducers.append(transducer((bottom_origin + vector_transducer), norm, 0))
+            bottom_transducers.append(Transducer((bottom_origin + vector_transducer), norm, 0))
 
             vector_transducer = np.array([x_offset, y_offset, -z_offset])
             norm = vector_0MT-vector_transducer
-            top_transducers.append(transducer((top_origin + vector_transducer), norm, np.pi))
+            top_transducers.append(Transducer((top_origin + vector_transducer), norm, np.pi))
             pass
     return bottom_transducers,top_transducers
