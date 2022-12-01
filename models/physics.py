@@ -43,8 +43,13 @@ def pressure_change_by_transducer_in_point(t, d, k):
 def get_pressure_change_by_transducer_in_point(p, transducer, type):
     d = get_distance_to_transducer(p, transducer)
     if type == 'complex':
+
+
         theta = get_angle_to_transducer_normal(p, transducer)
-        far_field_directivity = get_far_field_directivity(K, TRANSDUCER_RADIUS, theta)
+        far_field_directivity = get_far_field_directivity(theta, K, TRANSDUCER_RADIUS)
+
+
+
         k = BASE_AMP * far_field_directivity / d
         return \
             abs(
@@ -61,5 +66,4 @@ def get_pressure_change_by_transducer_in_point(p, transducer, type):
         raise ValueError(f"Unsupported value \"{type}\" for parameter \"type\"")
 
 if __name__ == "__main__":
-    test_transducer = models.transducer.Transducer(np.array([0,0,0]), np.array([0,0,1]), 0)
-    print(get_pressure_change_by_transducer_in_point(np.array([0,0,1E-3]), test_transducer, "complex"))
+    pass

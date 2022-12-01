@@ -35,7 +35,6 @@ def setup_levitator(rings=4, height=models.params.HEIGHT, transducer_offset=mode
 def plot(*plots):
 
     for index, plot in enumerate(plots):
-        print(index)
         plt.subplot(1,len(plots),index+1)
         plt.imshow(plot.data, vmin=plot.vmin, vmax=plot.vmax, cmap=plot.cmap, origin='lower')
         plt.title(plot.desc)
@@ -45,6 +44,12 @@ def plot(*plots):
 
     plt.tight_layout();
     plt.show()
+
+def plot_directivity_function(transducer=base_transducer):
+    d = get_far_field_directivity(x,z,transducer)
+    data = Plot_Data(d, directivity_cmap, desc="Direkticitätsfunktion")
+
+    plot(data)
 
 
 def plot_transducers(bottom_transducers=transducers[0], top_transducers=transducers[1]):
@@ -62,39 +67,28 @@ def plot_transducers(bottom_transducers=transducers[0], top_transducers=transduc
 
 
 def plot_pressure_waves(transducers=transducers[0], phase=0, left="complex", right="simple"):
-    fig, axs = plt.subplots(1, 2)
 
-    ax1 = sb.heatmap(get_pressure_wave(x, z, transducers, phase, left), xticklabels=10, yticklabels=10, ax=axs[0],
-                     vmin=-600, vmax=600,
-                     cmap=gif_cmap)
-    ax1.invert_yaxis()
-    ax1.set_aspect('equal')
+    d1 = get_pressure_wave(x, z, transducers, phase, left)
+    d2 = get_pressure_wave(x,z, transducers, phase, right)
 
-    ax2 = sb.heatmap(get_pressure_wave(x, z, transducers, phase, right), xticklabels=10, yticklabels=10, ax=axs[1],
-                     cmap=gif_cmap, vmin=-32,
-                     vmax=32)
-    ax2.invert_yaxis()
-    ax2.set_aspect('equal')
+    data1 = Plot_Data(d1, gif_cmap, vmin=-650, vmax=650, desc="Komplexe Wellen")
+    data2 = Plot_Data(d2, gif_cmap, vmin=-32, vmax=32, desc="Vereinfachte Wellen")
+
+    plot(data1, data2)
 
     plt.show()
-
 
 
 def plot_interference(transducers=transducers, phase=0, phase_shift=0, left='complex', right='simple'):
     fig, axs = plt.subplots(1, 2)
 
-    ax1 = sb.heatmap(get_interference(x, z, transducers, phase, phase_shift, left), xticklabels=10, yticklabels=10,
-                     ax=axs[0],
-                     vmin=-960, vmax=960, cmap=custom_cmap)
-    ax1.invert_yaxis()
-    ax1.set_aspect('equal')
+    d1 = get_interference(x, z, transducers, phase, phase_shift, left)
+    d2 = get_interference(x,z, transducers, phase, phase_shift, right)
 
-    ax2 = sb.heatmap(get_interference(x,z, transducers, phase, phase_shift, right), xticklabels=10, yticklabels=10, ax=axs[1],
-                     vmin=-50, vmax=50, cmap=custom_cmap)
-    ax2.invert_yaxis()
-    ax2.set_aspect('equal')
+    data1 = Plot_Data(d1, custom_cmap, vmin=-960, vmax=960, desc="Komplexe Interferenz")
+    data2 = Plot_Data(d2, custom_cmap, vmin=-50, vmax=50, desc="Vereinfachte Interferenz")
 
-    plt.show()
+    plot(data1, data2)
 
 
 def plot_pressure_change(transducers=transducers, phase_shift=0, left="complex", right="simple"):
@@ -108,15 +102,8 @@ def plot_pressure_change(transducers=transducers, phase_shift=0, left="complex",
     plot(data1, data2)
 
 
-def plot_directivity_function(transducer=base_transducer):
-    d = get_far_field_directivity(x,z,transducer)
-    data = Plot_Data(d, directivity_cmap, desc="Direkticitätsfunktion")
-
-    plot(data)
-
 
 if (__name__ == "__main__"):
-    setup_levitator()
-    plot_pressure_change()
+    pass
 
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten
