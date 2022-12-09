@@ -8,9 +8,9 @@ def get_far_field_directivity(x, z, transducer):
 
 
 def get_pressure_wave(x, z, transducers, phase=0, type='complex'):
+
     transducers = make_list(
         transducers)  # TODO: Hier landen jetzt in der Regel Tupel -> Tupelinhalt muss geändert werden
-
 
     wave = np.zeros((200,200))
 
