@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
-import seaborn as sb  # TODO: use plt.imshow instead
 
 import models.params
 from models.data_generator import get_pressure_wave, get_interference, get_pressure_change, get_far_field_directivity
@@ -9,7 +8,7 @@ from models.transducer import Transducer, generate_transducers
 from models.plot_data import Plot_Data
 from models.helpers import make_list
 
-from models.params import RES
+from models import params
 
 import sys
 
@@ -21,9 +20,13 @@ gif_cmap = LinearSegmentedColormap.from_list("custom", ["black", "white", "black
 directivity_cmap = LinearSegmentedColormap.from_list("custom", ["white", "black"])
 plane_map = LinearSegmentedColormap.from_list("custom", ["blue", "red"])
 
-x = np.linspace(-0.05, 0.05, RES)
-z = np.linspace(0, 0.1, RES)
+x = np.linspace(-0.05, 0.05, params.RES)
+z = np.linspace(0, 0.1, params.RES)
 x, z = np.meshgrid(x, z)
+
+nx = np.linspace(-.01,.01, params.RES)
+nz = np.linspace((params.HEIGHT/2)-.015, (params.HEIGHT/2)+.015, params.RES)
+nx,nz = np.meshgrid(nx,nz)
 
 transducers = generate_transducers()
 base_transducer = Transducer(np.array([0, 0, 0]), np.array([0, 0, 1]), 0)
@@ -37,7 +40,6 @@ def setup_levitator(rings=4, height=models.params.HEIGHT, transducer_offset=mode
     models.params.TRANSDUCER_OFFSET = transducer_offset
     models.params.BASE_FREQ = frequency
     models.params.TRANSDUCER_RADIUS = transducer_radius
-
 
 def plot(*plots):
 
@@ -103,8 +105,6 @@ def plot_pressure_waves(transducers=transducers[0], phase=0, left=None, right=No
     else:
         plot(data1)
 
-    plt.show()
-
 
 def plot_interference(transducers=transducers, phase=0, phase_shift=0, left=None, right=None):
 
@@ -112,7 +112,7 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left=None
 
     if(left == "simple"):r = 50*(len(transducers[0]) / 36)
     elif(left == "complex"): r = 960*(len(transducers[0]) / 36)
-    else: r = max(d1)
+    else: r = 0
 
     data1 = Plot_Data(d1, custom_cmap, vmin=-r, vmax=r, desc=f"{left} Interference")
 
@@ -123,7 +123,7 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left=None
 
         if(right == "simple"):r = 50*(len(transducers[0]) / 36)
         elif(right == "complex"): r = 960*(len(transducers[0]) / 36)
-        else: r = max(d1)
+        else: r = 0
 
         data2 = Plot_Data(d2, custom_cmap, vmin=-r, vmax=r, desc=f"{right} Interference")
 
@@ -132,23 +132,9 @@ def plot_interference(transducers=transducers, phase=0, phase_shift=0, left=None
         plot(data1)
 
 
-def plot_plane(x=x, z=z):
-
+def plot_plane(x=nx, z=nz):
 
     data = get_pressure_change(x, z, transducers, type="simple")
-    #data2 = data.copy()
-
-    #find avergae
-    #avg = []
-    #for r in data2:
-        #avg.append(sum(r)/len(r))
-
-    #avg = sum(avg)/len(avg)
-
-
-    #for r in range(len(data)):
-    #    for d in range(len(data[r])):
-    #        data[r][d] = abs(avg - data[r][d])
 
     fig = plt.figure(num=1, clear=True)
     ax = fig.add_subplot(1, 1, 1, projection='3d')
@@ -183,9 +169,14 @@ def plot_pressure_change(transducers=transducers, phase_shift=0, left=None, righ
 
 
 def plot_pressure_over_time(transducer, point, type="simple"):
-    x = np.linspace(0,2*np.pi, 100)
-    #y = get_pressure_wave(transducer, point[0], point[2], type="simple", phase=x)
-    y = np.sin(x)
+
+    x = []
+    y = []
+
+    for t in range(0,100):
+        tn = t/100*2*np.pi
+        x.append(tn)
+        y.append(models.physics.get_pressure_by_transducer_in_point(point, transducer, tn, "complex"))
 
     fig=plt.figure(figsize=(5,2.8))
     plt.scatter(x,y)
@@ -194,6 +185,11 @@ def plot_pressure_over_time(transducer, point, type="simple"):
 
 if (__name__ == "__main__"):
     setup_levitator()
+
+    x = np.linspace(-.01, .01, params.RES)
+    z = np.linspace((params.HEIGHT / 2) - .015, (params.HEIGHT / 2) + .015, params.RES)
+    x, z = np.meshgrid(x, z)
+
     plot_plane()
 
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten

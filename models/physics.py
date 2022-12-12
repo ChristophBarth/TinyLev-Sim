@@ -20,10 +20,11 @@ get_far_field_directivity = np.vectorize(far_field_directivity)
 
 def get_pressure_by_transducer_in_point(p, transducer, phase, type):
     d = get_distance_to_transducer(p, transducer)
+    phase += transducer.phase_shift
     if type == 'complex':
         theta = get_angle_to_transducer_normal(p, transducer)
         far_field_directivity = get_far_field_directivity(theta, K, TRANSDUCER_RADIUS)
-        return BASE_AMP * far_field_directivity / d * np.exp(1j * (-phase + K * d)).real
+        return BASE_AMP * far_field_directivity / d * np.exp(1j * (-(phase+(np.pi/2)) + K * d)).real
     elif type == 'simple':
         return BASE_AMP * np.sin(-phase + K * d)
     else:
@@ -37,7 +38,7 @@ def get_directivity_data(p, transducer):
 
 
 def pressure_change_by_transducer_in_point(t, d, k):
-    return k * np.exp(1j * (-t + K * d))
+    return k * np.exp(1j * (-(t+(np.pi/2)) + K * d))
 
 
 def get_pressure_change_by_transducer_in_point(p, transducer, type):
