@@ -62,7 +62,7 @@ def plot(*plots):
 
 def plot_directivity_function(transducer=base_transducer):
     d = get_far_field_directivity(x,z,transducer)
-    data = Plot_Data(d, directivity_cmap, desc="Direkticitätsfunktion")
+    data = Plot_Data(d, directivity_cmap, desc="Direktivitätsfunktion")
 
     plot(data)
 
@@ -85,7 +85,7 @@ def plot_pressure_waves(transducers=transducers[0], phase=0, left=None, right=No
 
     transducers = make_list(transducers)
 
-    d1 = get_pressure_wave(x, z, transducers, phase, left)
+    d1 = get_pressure_wave(x, z, transducers, phase=phase, type=left)
 
     if(left == "simple"): r = len(transducers)
     elif(left == "complex"): r = 650*(len(transducers)/32)
@@ -174,9 +174,9 @@ def plot_pressure_over_time(transducer, point, type="simple"):
     y = []
 
     for t in range(0,100):
-        tn = t/100*2*np.pi
-        x.append(tn)
-        y.append(models.physics.get_pressure_by_transducer_in_point(point, transducer, tn, "complex"))
+        t = t/100*2*np.pi
+        x.append(t)
+        y.append(models.physics.get_pressure_by_transducer_in_point(point, transducer, t, "complex"))
 
     fig=plt.figure(figsize=(5,2.8))
     plt.scatter(x,y)
@@ -184,12 +184,6 @@ def plot_pressure_over_time(transducer, point, type="simple"):
 
 
 if (__name__ == "__main__"):
-    setup_levitator()
-
-    x = np.linspace(-.01, .01, params.RES)
-    z = np.linspace((params.HEIGHT / 2) - .015, (params.HEIGHT / 2) + .015, params.RES)
-    x, z = np.meshgrid(x, z)
-
-    plot_plane()
+    plot_pressure_waves(left="simple", right="complex")
 
 #TODO: Phase Shift als Argument wahrscheinlich ungeeignet, da bereits in Transducer Klasse enthalten
