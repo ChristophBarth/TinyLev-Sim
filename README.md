@@ -31,14 +31,6 @@ python -m pip install ipykernel
 
 After that, start Jupyter with the same environment and open [TinyLev-Simulation-Static.ipynb](/Users/christophbarth/PycharmProjects/TinyLev-Sim/TinyLev-Simulation-Static.ipynb). Because the project uses a `src/` layout, the notebook should be run from an environment where `tinylev_sim` is installed, rather than by manually modifying `sys.path`.
 
-## Example
-
-```python
-from tinylev_sim import plotting
-
-plotting.plot_pressure_change(left="complex", right=None)
-```
-
 ## Notes
 
 - The simulation package is intentionally separated from plotting so numerical code can be reused without importing visualization dependencies.
