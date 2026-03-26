@@ -31,11 +31,6 @@ python -m pip install ipykernel
 
 After that, start Jupyter with the same environment and open [TinyLev-Simulation-Static.ipynb](/Users/christophbarth/PycharmProjects/TinyLev-Sim/TinyLev-Simulation-Static.ipynb). Because the project uses a `src/` layout, the notebook should be run from an environment where `tinylev_sim` is installed, rather than by manually modifying `sys.path`.
 
-## Notes
-
-- The simulation package is intentionally separated from plotting so numerical code can be reused without importing visualization dependencies.
-- The notebook is the best entry point if you want to understand the project results quickly.
-
 ## Reference
 
 This project is based on and attempts to replicate the plots from:
